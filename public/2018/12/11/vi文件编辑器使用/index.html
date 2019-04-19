@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>vi文件编辑器使用 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vi文件编辑器使用">
+<meta property="og:url" content="http://yoursite.com/2018/12/11/vi文件编辑器使用/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-12-18T08:00:18.625Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vi文件编辑器使用">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-vi文件编辑器使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/11/vi文件编辑器使用/" class="article-date">
+  <time datetime="2018-12-11T10:57:30.000Z" itemprop="datePublished">2018-12-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vi文件编辑器使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">1.whereis:指定搜索什么样的文件</span><br><span class="line">      #whereis -b ls //搜索ls的二进制文件</span><br><span class="line">      #whereis -s ls //搜索ls的源码包文件</span><br><span class="line">		#whereis -m ls #搜索ls的帮助文件</span><br><span class="line"></span><br><span class="line">2.locate 文件名 //搜索数据库文件，数据库文件存放在/var/lib/mlocate/文件夹下</span><br><span class="line">  1)手动更新库文件: # updatedb</span><br><span class="line"> 2)自动更新:＃crond （计划任务）</span><br><span class="line"></span><br><span class="line">3.makewhatis:手动更新man手册</span><br><span class="line"></span><br><span class="line">－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－</span><br><span class="line">编辑器:joe nano vim vi </span><br><span class="line"></span><br><span class="line">1.vi文件编辑器使用  </span><br><span class="line"> #vi 文件名   //对文本文件进行编辑</span><br><span class="line">   1）如果文件不存在则创建</span><br><span class="line">   2）如果文件存在则打开</span><br><span class="line">   3）文件没有在当前路径下要输入文件的绝对路径</span><br><span class="line"></span><br><span class="line">  三种模式:</span><br><span class="line">         1）一般模式：把一个文件用vi打开 #vi test.txt </span><br><span class="line">                 可做操作：复制，剪贴，删除，光标移动</span><br><span class="line">              11）光标移动：</span><br><span class="line">                      光标在行间跳转：</span><br><span class="line">                           方向键   </span><br><span class="line">          shift+g:文件末行    </span><br><span class="line">          gg:文件首行   </span><br><span class="line">          10gg：光标定位到10行</span><br><span class="line"> </span><br><span class="line">                      光标在行内跳转：</span><br><span class="line">                            方向键   </span><br><span class="line">           end:行尾  </span><br><span class="line">           home:行首</span><br><span class="line">              22）删除：</span><br><span class="line">          dd:      删除光标所在的行</span><br><span class="line">          3dd:     从光标所在行开始删除3行</span><br><span class="line">          d1(数字)G:从光标所在行开始删除到文件行首的所有行</span><br><span class="line">          dG:      从光标所在行开始删除到文件行尾的所有行</span><br><span class="line">          u:       撤销删除</span><br><span class="line">			 ctrl+r:  取消撤销</span><br><span class="line">              33）复制：</span><br><span class="line">          yy:  复制光标所在行</span><br><span class="line">          3yy: 一起复制3行</span><br><span class="line">          y1G: 从光标所在行开始复制到文件行首的所有行</span><br><span class="line">          yG:  从光标所在行开始复制到文件行尾的所有行</span><br><span class="line">          p:   粘贴在光标所在行的下方</span><br><span class="line">          P：  粘贴在光标所在行的上方</span><br><span class="line">              44）剪切：dd+p</span><br><span class="line">                      </span><br><span class="line">        2）输入模式： 对文件内容进行编辑 ， 按i a o I A O s 都可进入输入模式</span><br><span class="line">         i:输入的内容在光标前</span><br><span class="line">         I：光标定位到行首</span><br><span class="line">         a:光标向后移一位</span><br><span class="line">         A:光标移到行尾</span><br><span class="line">         o：当前行的下方新起一行</span><br><span class="line">         O：当前行的上方新起一行</span><br><span class="line">         s:删除光标所在位置字符</span><br><span class="line">       3）末行模式：对文件的内容进行保存，另存为，查找，替换，搜索</span><br><span class="line">           进入末行模式: shift+:  /   ?  </span><br><span class="line">               /  ?  :搜索进入末行</span><br><span class="line">      shift+: ：另存为或保存进入末行</span><br><span class="line">      :w   保存</span><br><span class="line">      :q   退出</span><br><span class="line">      :wq  保存并退出</span><br><span class="line">      :wq! 强制保存并退出</span><br><span class="line">      :q!  不保存退出</span><br><span class="line">      :x  保存并退出</span><br><span class="line">      :X 保存加密码退出</span><br><span class="line">      :set nu 显示行号</span><br><span class="line">      :set nonu 取消行号</span><br><span class="line">      :r 路径/文件名  ： 导入文件内容（默认在光标所在行的下边）</span><br><span class="line">      :2r 路径/文件名  ：导入到第二行的下边</span><br><span class="line">      :w  路径/文件名   ：导出</span><br><span class="line">      :18,25W /tpm/a.txt：把文件18行到25行导出到a.txt下（a.txt文件不存在）</span><br><span class="line">      :set nohlsearch ：去掉高亮搜索</span><br><span class="line">      :set hlsearch   ：显示高亮搜索 </span><br><span class="line">      :set all    ：显示可用的所有选项</span><br><span class="line">      :s/源字符/新字符/[选项]  ：替换</span><br><span class="line">                       [选项] ：g 全局替换,(把所有匹配的都替换)</span><br><span class="line">               i 忽略大小写</span><br><span class="line">        :s/A/w/i #把光标所在行第一个匹配的A替换成w,不区分大小写</span><br><span class="line">        :s/A/w/ig #把把光标所在行A全局替换成w,不区分大小写</span><br><span class="line">        :%s/root/plj/g #把文件中所有root替换成plj</span><br><span class="line">        :3,4s/root/plj/ #把3到4行的root替换成plj</span><br><span class="line">        :%s/#//      #去掉文件中的注释</span><br><span class="line">        :30s/#// #把第30行#替换成空</span><br><span class="line">                   </span><br><span class="line">               搜索</span><br><span class="line">              从文件的上方向下方搜索 /directory #搜索directory</span><br><span class="line">              从文件的下方往上方搜索 ?directory </span><br><span class="line">     n:把光标定位到下一个匹配的字符上</span><br><span class="line">     N:把光标定位到上一个匹配的字符上</span><br><span class="line">             </span><br><span class="line">              执行命令： :! ls #查看当前目录是否有所保存的文件</span><br><span class="line">                </span><br><span class="line">            注：不能从输入模式到末行模式，从输入模式切换到一般模式，按ESC，然后在进入末行模式</span><br><span class="line">           </span><br><span class="line">         4）扩展命令</span><br><span class="line">       :files ：查看当前打开几个文件      </span><br><span class="line">       :next ：查看下一个打开的文件</span><br><span class="line">       :first ：回到第一个文件</span><br><span class="line">        5）一次打开多个文件： #vimdiff a.txt b.txt</span><br><span class="line">      ctrl+ww ：把光标切换到另一个窗口</span><br><span class="line">      #vimdiff -o a.txt b.txt  #水平分割 </span><br><span class="line"></span><br><span class="line">   6）vim区块模式：话块把光标定位到起始位置，按方向键划块</span><br><span class="line">         ctrl+v:一般模式下执行ctrl+v进入区块模式</span><br><span class="line">         d：删除</span><br><span class="line">         p:粘贴</span><br><span class="line">         y:复制</span><br><span class="line">         u:撤销</span><br><span class="line">      7）与vi相关的文件</span><br><span class="line">         #vim /root/.viminfo    #记录vim操作命令</span><br><span class="line">         #&gt; /root/.viminfp #清理vim记录操作</span><br><span class="line">         # vim /root/.vimrc   #vim的配置文件，放在家目录下，</span><br><span class="line">            #默认不存在，先进行创建,一个功能占用一行</span><br><span class="line">            :set backup #自动生成备份文件</span><br><span class="line">            ###################################################</span><br><span class="line">          #.vimrc文件内容</span><br><span class="line">          :set nu</span><br><span class="line">          :set backup</span><br><span class="line">             ###################################################</span><br><span class="line"></span><br><span class="line">          文件的缓存文件:  .bak.txt.swp</span><br><span class="line">                  </span><br><span class="line">2.查看二进制文件:＃od 文件名</span><br><span class="line"></span><br><span class="line">3. 重定向 ：</span><br><span class="line">        ‘&gt;’:覆盖重定向</span><br><span class="line">        ‘&gt;&gt;’:追加重定向</span><br><span class="line">    #head -20 /etc/passwd &gt; ./test.txt  //把前20行输出到当前路径下的test.txt</span><br><span class="line">    #cat -b test.txt  //加行号查看</span><br><span class="line"></span><br><span class="line">4.#which vim  #查看软件是由那个文件提供 </span><br><span class="line">  #rpm -qf /usr/bin/vim  #查看软件由那个软件包提供</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/11/vi文件编辑器使用/" data-id="cju0k1qmd000dx5s6p70jefn9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/12/linux用户管理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          linux用户管理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/11/文件查找-解压缩/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">文件查找&amp;解压缩</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务器/">服务器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/go/" style="font-size: 17.5px;">go</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/php/" style="font-size: 12.5px;">php</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/服务器/" style="font-size: 15px;">服务器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/24/SQLSTATE-HY000-2054-The-server-requested/">SQLSTATE[HY000] [2054] The server requested </a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/辅助DNS服务器搭建/">辅助DNS服务器搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/DNS-Domain-Name-System-域名系统/">DNS (Domain Name System)域名系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/周期性计划任务于网络配置/">周期性计划任务于网络配置</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/进程管理-计划任务/">进程管理&amp;计划任务</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

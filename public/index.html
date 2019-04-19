@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-SQLSTATE-HY000-2054-The-server-requested" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/24/SQLSTATE-HY000-2054-The-server-requested/" class="article-date">
+  <time datetime="2018-12-24T03:10:36.000Z" itemprop="datePublished">2018-12-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/php/">php</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/24/SQLSTATE-HY000-2054-The-server-requested/">SQLSTATE[HY000] [2054] The server requested </a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>laravel 报错， SQLSTATE[HY000] [2054] The server requested authentication method</p>
+</blockquote>
+<h4 id="使用PHP连接MySQL-8的时候，可能会发生如标题所示的错误："><a href="#使用PHP连接MySQL-8的时候，可能会发生如标题所示的错误：" class="headerlink" title="使用PHP连接MySQL 8的时候，可能会发生如标题所示的错误："></a>使用PHP连接MySQL 8的时候，可能会发生如标题所示的错误：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQLSTATE[HY000] [2054] The server requested authentication method unknown to the client</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>发生这种错误，是由于MySQL8默认使用了新的密码验证插件：caching_sha2_password，而之前的PHP版本中所带的mysqlnd无法支持这种验证。</p>
+</li>
+<li><p>解决办法：</p>
+</li>
+<li>修改密码认证方式<br>ALTER USER ‘YOURUSERNAME‘@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘YOURPASSWORD’;</li>
+</ul>
+<h4 id="设置mysql简单密码报错："><a href="#设置mysql简单密码报错：" class="headerlink" title="设置mysql简单密码报错："></a>设置mysql简单密码报错：</h4><h5 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h5><ul>
+<li><p>查看mysql全局参数配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE <span class="string">'validate_password%'</span>;</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">| Variable_name                        | Value  |</span><br><span class="line">+--------------------------------------+--------+</span><br><span class="line">| validate_password_dictionary_file    |        |</span><br><span class="line">| validate_password_length             | 8      |</span><br><span class="line">| validate_password_mixed_case_count   | 1      |</span><br><span class="line">| validate_password_number_count       | 1      |</span><br><span class="line">| validate_password_policy             | MEDIUM |</span><br><span class="line">| validate_password_special_char_count | 1      |</span><br><span class="line">-------------------------------------------------</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数解释<br>1) validate_password_dictionary_file ：插件用于验证密码强度的字典文件路径。</p>
+<p>2) validate_password_length ：密码最小长度，参数默认为8，它有最小值的限制，最小值为：validate_password_number_count + validate_password_special_char_count + (2 * validate_password_mixed_case_count)</p>
+<p>3) validate_password_mixed_case_count：密码至少要包含的小写字母个数和大写字母个数。</p>
+<p>4) validate_password_number_count：密码至少要包含的数字个数。</p>
+<p>5) validate_password_policy：密码强度检查等级，0/LOW、1/MEDIUM、2/STRONG</p>
+<p>6) validate_password_special_char_count：密码至少要包含的特殊字符数。</p>
+</li>
+<li><p>修改mysql参数配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_policy=0;</span><br><span class="line">Query OK, 0 rows affected (0.05 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; </span><br><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_mixed_case_count=0;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_number_count=3;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_special_char_count=0;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_length=3;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; SHOW VARIABLES LIKE <span class="string">'validate_password%'</span>;</span><br><span class="line">+--------------------------------------+-------+</span><br><span class="line">| Variable_name                        | Value |</span><br><span class="line">+--------------------------------------+-------+</span><br><span class="line">| validate_password_dictionary_file    |       |</span><br><span class="line">| validate_password_length             | 3     |</span><br><span class="line">| validate_password_mixed_case_count   | 0     |</span><br><span class="line">| validate_password_number_count       | 3     |</span><br><span class="line">| validate_password_policy             | LOW   |</span><br><span class="line">| validate_password_special_char_count | 0     |</span><br><span class="line">+--------------------------------------+-------+</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/24/SQLSTATE-HY000-2054-The-server-requested/" data-id="cju0k1qma0008x5s6217369uf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-辅助DNS服务器搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/辅助DNS服务器搭建/" class="article-date">
+  <time datetime="2018-12-12T08:43:13.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/辅助DNS服务器搭建/">辅助DNS服务器搭建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-辅助DNS服务器搭建"><a href="#1-辅助DNS服务器搭建" class="headerlink" title="1. 辅助DNS服务器搭建"></a>1. 辅助DNS服务器搭建</h4><pre><code>用IP是192.168.2.168 作plj.com域的辅助DNS服务器
+ * 1.1. rpm -ivh bind
+ * 1.2. ping -c 4 192.168.2.51
+    #iptables -F //清防火墙
+    #setenforce 0
+ * 1.3.从DNS服务器编辑自己的主配置文件
+    #vim /var/named/chroot/etc/named.conf
+    options {
+       directory  &quot;/var/named/&quot;;
+    }
+
+    zone &quot;plj.com&quot; {
+       type  slave;
+       file  &quot;slaves/plj.com.zone&quot;; //相对路径/var/named/saleve/数据库文件，数据库文件名可以自己给定
+       masters {192.168.2.51;}; //主DNS服务器IP
+    }
+
+ * 1.4.修改主DNS服务器配置文件，允许谁从我这边下载数据库文件。 named.conf
+    zone &quot;plj.com&quot; {
+      type masters;
+      file &quot;plj.com.zone&quot;;
+      allow-transfer{ 192.168.2.168;192.168.2.51;}; //用来指定辅助DNS的IP,谁做辅助DNS服务器
+    }
+
+ * 1.5.配置主数据库文件 /var/named/chroot/var/named/
+    plj.com.           IN   NS  dns.plj.com.
+    dns.plj.com.    IN    A  192.168.2.51
+    plj.com.        IN   NS slave1.plj.com.
+    slave1.plj.com. IN    A 192.168.2.168
+    plj.com.        IN   NS slave2.plj.com.
+    slave1.plj.com. IN    A 192.168.2.50
+
+ * 1.6.把辅助DNS主机的named服务开启
+
+ * 1.7.客户端配置
+    #vim /etc/resolv.conf
+    nameserver 192.168.2.51
+    nameserver 192.168.2.132
+
+ * 1.8.测试
+   51 service named stop
+   client  host www.plj.com
+</code></pre><h4 id="2-事务签名"><a href="#2-事务签名" class="headerlink" title="2. 事务签名"></a>2. 事务签名</h4><pre><code> 防止别的辅助DNS服务器下载主DNS服务器数据库文件
+* 2.1 生成密钥
+   master dns
+   #dnssec-keygen -a hmac-md5 -b 512 -n host jing
+   -a:算法
+   -b:长度
+   -n:类型
+   名字
+   #cat Kjing.+157+45353.private &gt;&gt; /var/named/chroot/etc/named.conf  
+
+* 2.2 制作密钥文件  vim /var/named/chroot/etc/named.conf 
+    key &quot;rndckey&quot; {
+       algorithm hmac-md5;  //密钥算法
+       secret &quot;Y3lkWdmcSEaTWbicn1loDQ==&quot;;  //key
+   };
+
+* 2.3 调用密钥文件 vim /var/named/chroot/etc/named.conf 
+    zone &quot;zyj.com&quot; {
+        type master;
+        file &quot;zyj.com.zone&quot;;
+        allow-transfer{key rndckey;}; //调用密钥,密钥文件名与制作文件名相同
+    };
+
+* 2.4 配置辅助DNS配置文件 vim /var/named/chroot/etc/named.conf 
+    zone &quot;zyj.com&quot; {
+       type  slave;
+       file  &quot;slaves/zyj.com.zone&quot;;
+       masters {192.168.0.10 key rndckey;};   //密钥文件名与主密钥文件名相同
+
+    };
+</code></pre><h4 id="3-分离解析"><a href="#3-分离解析" class="headerlink" title="3.分离解析"></a>3.分离解析</h4><pre><code> 不同客户端访问相同主机名时，给出不同的解析结果
+ view &quot;视图名称&quot;{
+
+ };
+
+ 192.168.2.51  plj.com
+
+ client 192.168.2.22   www.plj.com  192.168.2.200
+ client 192.168.2.202  www.plj.com  192.168.2.210
+
+
+ * 3.1 编辑主DNS的配置文件 vim /var/named/chroot/etc/named.conf
+  第一种写法：
+   view &quot;pc200&quot; {
+        match-clients {192.168.0.200;};
+        zone &quot;zyj.com&quot; {
+            type master;
+            file &quot;zyj.com.zone&quot;;
+            allow-transfer{key rndckey;};
+        };
+    };
+    view &quot;pc210&quot; {
+        match-clients {any;};
+        zone &quot;zyj.com&quot; {
+            type master;
+            file &quot;zyj3.com.zone&quot;;
+            allow-transfer{key rndckey;};
+        };
+    };
+    第二种写法
+    acl &quot;hosts1&quot; {192.168.0.18;};
+    view &quot;pc200&quot; {
+        match-clients { hosts1;};
+        zone &quot;zyj.com&quot; {
+            type master;
+            file &quot;zyj.com.zone&quot;;
+            allow-transfer{key rndckey;};
+        };
+    };
+* 3.2 编辑主数据库文件 /var/named/chroot/var/named/zyj.com.zone
+         www             IN        A    192.168.0.200
+</code></pre><h4 id="4-搭建网站服务器"><a href="#4-搭建网站服务器" class="headerlink" title="4.搭建网站服务器"></a>4.搭建网站服务器</h4><pre><code>用IP是192.168.2.51的主机作网站服务，并让客户端通过www.plj.com访问到网站的首页文件
+</code></pre><ul>
+<li><p>4.1 配置文件中常用的参数<br>   /etc/httpd/  工作目录<br>   httpd.conf   主配置文件<br>   /conf/：自己的配置文件<br>   /conf.d/:联合自己其他服务的配置文件<br>   /logs/：日志文件 </p>
+<pre><code>access.log 访问日志
+error_log  错误日志
+</code></pre><p>   /modules/:模块文件<br>   /run/:存放PID号</p>
+<p>   httpd.conf配置参数：</p>
+<pre><code>ServerTokens OS :提供网站服务软件的版本
+ServerRoot &quot;/etc/httpd&quot; :服务跟目录
+pidFile run/httpd.pid:服务的PID号文件
+Timeout 120：超时单位秒
+keepAlive Off/On：是否开启长连接,一次建立连接可以访问多个页面
+MaxKeepAliveRequests 100:长连接的最大请求数
+KeepAliveTimeout 15:长连接的超时时间
+
+网站服务器运行方式：
+      进程方式：默认
+     &lt;IfModule prefork.c&gt;
+         StartServers       8   //开启进程数
+         MinSpareServers    5   //最小空闲服务
+         MaxSpareServers   20   //最大空闲服务
+         ServerLimit      256   //每个进程能接受多少个并发请求
+         MaxClients       256   //客户端最大请求连接数
+         MaxRequestsPerChild  4000 //最大请求数，每个进程累计处理达到4000，自动杀死
+     &lt;/IfModule&gt;
+
+    线程方式：
+     &lt;IfModule worker.c&gt;
+         StartServers         2
+         MaxClients         150
+         MinSpareThreads     25
+         MaxSpareThreads     75
+         ThreadsPerChild     25
+         MaxRequestsPerChild  0
+     &lt;/IfModule&gt;
+服务启动脚本：/etc/sysconfig/httpd
+改动服务器运行方式：vim /etc/sysconfig/httpd
+      HTTPD=/usr/sbin/httpd.worker
+
+ Listen 80:监听端口
+ 记录服务名，端口号文件：/etc/services
+    注：#elinks --dump http://www.zyj.com //命令行测试域名主页
+ LoadModule :加载模块
+ Include conf.d/*.conf //包含文件
+ User apache  :所有者
+ Group apache ：所属组
+ ServerAdmin root@localhost //管理员邮箱
+ ServerName:指定网站服务器主机名
+ DocumentRoot &quot;/var/www/html&quot;:指定网页文件存放目录
+
+&lt;Directory /&gt;  //网页文件夹目录/var/www/html
+     Options FollowSymLinks
+     AllowOverride None
+&lt;/Directory&gt;
+
+&lt;Directory &quot;/var/www/html&quot;&gt; 
+     Options Indexes FollowSymLinks 
+     AllowOverride None
+     Order allow,deny  //设置访问权限，默认是拒绝所有人访问
+     Order deny,allow  //设置访问权限，默认是允许所有人访问
+     Allow from 192.168.2.168 //只允许2.168访问
+     Allow from all  //所有客户端访问
+ &lt;/Directory&gt;
+
+ DirectoryIndex :指定网站首页文件名
+ LogFormat:记录日志格式
+ CustomLog:指定日志存放位置和格式
+ Alias:目录别名
+</code></pre></li>
+</ul>
+<ul>
+<li><p>4.2 用户个人主页</p>
+<pre><code>访问web服务器上本地用户家目录下的网页文件。
+http://www.plj.com/~plj  //访问家目录 ~plj代表家目录 
+4.2.1 添加本地用户  
+     #useradd 用户名
+4.2.2 修改httpd.conf 开启用户个人主页功能
+     1.注释 #UserDir disable
+     2.开启 UserDir public_html //指定个人主页存放路径 /home/plj/public_html
+</code></pre><p>   4.2.3 开启访问权限</p>
+<pre><code>&lt;Directory /home/*/public_html&gt;   //发布个人主页目录
+    //可以在目录下执行什么样的文件类型
+    AllowOverride FileInfo AuthConfig Limit
+    Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+    //设置访问网页文件的方式
+    &lt;Limit GET POST OPTIONS&gt;   //上传文件使用方式
+        Order allow,deny
+        Allow from all
+    &lt;/Limit&gt;
+    &lt;LimitExcept GET POST OPTIONS&gt;  //除了这几种方式
+        Order deny,allow
+        Deny from all
+    &lt;/LimitExcept&gt;
+&lt;/Directory&gt;
+</code></pre><p>   4.2.4 从启服务，让刚才的配置生效</p>
+<pre><code>#service httpd restart
+</code></pre><p>   4.2.5 #su - plj</p>
+<pre><code>#mkdir public_html
+#cd public_html
+#echo &quot;xxxxx&quot; &gt; index.html
+#su - root
+#chmod o+rx  /home/plj
+</code></pre><p>   4.2.6 测试</p>
+<pre><code>http://www.plj.com/~plj
+#elinks --dump http://www.plj.com/~plj
+</code></pre></li>
+<li><p>4.3 虚拟主机<br>  4.3.1 基于域名的虚拟主机   通过主机名区分</p>
+<pre><code>1. 配置DNS
+   在DNS的正向区域文件里写A记录
+    www.plj.com.       IN      A         192.168.2.51
+    bbs.plj.com.           IN        A        192.168.2.51
+2. 编辑/etc/httpd/conf/httpd.conf,发布虚拟主机
+    &lt;VirtualHost&gt;
+        虚拟主机参数
+    &lt;/VirtualHost&gt;
+ 开启NameVirtualHost 192.168.0.10:80   //指定虚拟主机是基于域名的
+
+  &lt;VirtualHost 192.168.0.10:80&gt;
+      ServerName www.zyj.com
+      DocumentRoot /www
+      ErrorLog logs/www.zyj.com-error_log
+      CustomLog logs/www.zyj.com-access_log 
+  &lt;/VirtualHost&gt;
+  &lt;VirtualHost 192.168.0.10:80&gt;
+      ServerName bbs.zyj.com
+      DocumentRoot /bbs
+      ErrorLog logs/bbs.zyj.com-error_log
+      CustomLog logs/bbs.zyj.com-access_log  common
+  &lt;/VirtualHost&gt;
+3. 创建虚拟主机存放网页的目录，要与httpd.conf配置文件中的一致
+   #mkdir  /www
+   #mkdir  /bbs
+   #echo &quot;www&quot;  &gt; /www/index.html
+   #echo &quot;bbs&quot; &gt; /bbs/index.html
+4. 从启服务
+   #service httpd restart
+5. 客户端测试
+
+  注：测试一直到欢迎页的原因  selinux
+    #setenforce 0  //关闭selinux
+    #getenforce    //查看
+    #vim /etc/sysconfig/selinux  //配置文件修改
+</code></pre><p>  4.3.2 基于IP的虚拟主机     通过IP地址区分</p>
+<pre><code>1. 有两块网卡
+   #ifconfig eth0 
+2. 编辑主配置文件httpd.conf
+   注释NameVirtualHost 192.168.0.10:80
+  &lt;VirtualHost 192.168.0.10:80&gt;
+      ServerName 192.168.0.100
+      DocumentRoot /100
+      ErrorLog logs/100.zyj.com-error_log
+      CustomLog logs/100.zyj.com-access_log  common
+  &lt;/VirtualHost&gt;
+</code></pre><p>  4.3.3 基于端口的虚拟主机   通过端口区分</p>
+<pre><code>1. 修改主配置文件，监听8080端口
+   Listen 8080
+   &lt;VirtualHost 192.168.0.10:8080&gt;
+      ServerName  www.plj.com
+      DocumentRoot /8080
+      ErrorLog logs/8080.zyj.com-error_log
+      CustomLog logs/8080.zyj.com-access_log
+  &lt;/VirtualHost&gt;
+</code></pre></li>
+<li><p>4.4 服务的访问控制</p>
+<pre><code>Order allow,deny  默认拒绝所有客户端访问
+Allow from 192.168.2.168
+allow from all
+
+Order deny,allow  默认允许所有客户端访问
+deny from 192.168.2.168
+deny from all
+</code></pre></li>
+<li><p>4.5 用户认证<br>   访问网站网页文件时需要提供用户名和密码 才可以访问。<br>   <a href="http://www.plj.com:8080" target="_blank" rel="noopener">http://www.plj.com:8080</a>  /admin username password<br>   file:///usr/share/doc/httpd-2.2.3/migration.html</p>
+<pre><code>4.5.1 修改主配置文件 httpd.conf
+   &lt;VirtualHost 192.168.0.10:8080&gt;
+           ServerName  www.plj.com
+           DocumentRoot /8080
+           ErrorLog logs/8080.zyj.com-error_log
+           CustomLog logs/8080.zyj.com-access_log 
+           &lt;Directory &quot;/admin&quot;&gt;  //访问目录限制
+              Order allow,deny
+              allow from 192.168.2.51
+              AuthType  Basic   //指定认证类型，所有浏览器都支持
+              AuthName &quot;自己起名&quot;  //指定认证域的名称
+              AuthDBUserFile &quot;/var/www/***.txt&quot;   //指定保存认证用户名和密码文件存放位置
+              require  valid-user   //设置用户访问权限,valid-user:有效用户
+           &lt;/Directory&gt;
+   &lt;/VirtualHost&gt;
+
+   4.5.2 创建用户认证文件
+        #rpm -qf /usr/bin/htpasswd
+        #htpasswd -c /var/www/***.txt           admin    （回车输入密码）
+                       保存密码和文件存放位置   用户名
+
+        -c:第一次创建认证文件
+        [root@localhost www]# htpasswd -D /www/user.txt admin1 //删除认证用户
+        Deleting password for user admin1
+        [root@localhost ~]# htpasswd -c /www/user.txt admin
+        New password: 
+        Re-type new password: 
+        Adding password for user admin
+
+   4.5.3 定义别名
+       Alias /students &quot;/var/www/html/share/students&quot;
+       &lt;Directory &quot;/var/www/html/share/students/&quot;&gt;
+           Options Indexes MultiViews
+           AllowOverride None
+           Order allow,deny
+           Allow from all
+       &lt;/Directory&gt;    
+
+    4.5.4 给脚本目录起别名
+       ScriptAlias /cgi-bin/ &quot;/var/www/cgi-bin/&quot;
+       &lt;Directory &quot;/var/www/cgi-bin&quot;&gt;
+           AllowOverride None
+           Options None
+           Order allow,deny
+           Allow from all
+       &lt;/Directory&gt;
+</code></pre></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/辅助DNS服务器搭建/" data-id="cju0k1qnf002gx5s67qkiyrbb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-DNS-Domain-Name-System-域名系统" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/DNS-Domain-Name-System-域名系统/" class="article-date">
+  <time datetime="2018-12-12T08:39:30.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/DNS-Domain-Name-System-域名系统/">DNS (Domain Name System)域名系统</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-DNS服务的功能"><a href="#1-DNS服务的功能" class="headerlink" title="1.DNS服务的功能"></a>1.DNS服务的功能</h4><p>   1.1 把主机名解析到IP地址  正向解析<br>   1.2 把IP地址解析到主机名  反向解析</p>
+<h4 id="2-DNS域名空间树形接口"><a href="#2-DNS域名空间树形接口" class="headerlink" title="2.DNS域名空间树形接口"></a>2.DNS域名空间树形接口</h4><pre><code>                      .（根域）13台根域服务器
+                      |
+ org     net   edu  gov   mil   hk   com   cn     顶级域
+                                      |
+                             baidu   163   jd     二级域
+                                      |
+                                ftp  www mail      三级域
+
+com   商业机构
+gov   政府部门
+int   国际组织
+mil   军事部门
+net   网络服务组织
+org   其他组织
+edu   教育机构
+</code></pre><h4 id="3-安装提供服务的软件包"><a href="#3-安装提供服务的软件包" class="headerlink" title="3. 安装提供服务的软件包"></a>3. 安装提供服务的软件包</h4><pre><code>[root@localhost ~]# rpm -qa | grep bind  
+ypbind-1.19-12.el5_6.1
+bind-devel-9.3.6-20.P1.el5
+bind-libs-9.3.6-20.P1.el5
+bind-utils-9.3.6-20.P1.el5
+bind-9.3.6-20.P1.el5
+bind-chroot-9.3.6-20.P1.el5            
+</code></pre><p>   安装bind后并不生成/etc/named.conf文件。<br>   在red hat enterprise linux 5中，bind程序的默认虚拟目录是/var/named/chroot.<br>   对虚拟目录而言，/etc/named.conf实际上是/var/named/chroot/etc/named.conf.</p>
+<h4 id="4-DNS的启动、停止、测试"><a href="#4-DNS的启动、停止、测试" class="headerlink" title="4. DNS的启动、停止、测试"></a>4. DNS的启动、停止、测试</h4><pre><code>#service named start
+#service named stop
+#service named restart
+在bind中还提供了一个专门用于远程配置DNS守护进程的命令rndc,
+r代表remote,使用rndc可以执行启动、停止、重载和转储等操作
+#rndc  stop  //停止DNS服务
+#rndc status  //查看named进程的配置情况
+</code></pre><h4 id="5-测试DNS服务器"><a href="#5-测试DNS服务器" class="headerlink" title="5. 测试DNS服务器"></a>5. 测试DNS服务器</h4><p>   5.1 nslookup</p>
+<pre><code>#nslookup
+&gt;192.168.0.l2
+</code></pre><p>   5.2 host</p>
+<pre><code>#host  www.subasafly.com
+#host  www.subasafly.com.zone
+#host  192.168.0.12
+</code></pre><p>   5.3 dig</p>
+<pre><code>#dig www.subasafly.com.zone
+</code></pre><p>   5.4 ping</p>
+<pre><code>#ping www.subasafly.com.zone
+</code></pre><h4 id="6-DNS服务器配置"><a href="#6-DNS服务器配置" class="headerlink" title="6. DNS服务器配置"></a>6. DNS服务器配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# rndc-confgen</span><br><span class="line"># Start of rndc.conf</span><br><span class="line">key &quot;rndckey&quot; &#123;</span><br><span class="line">        algorithm hmac-md5;</span><br><span class="line">        secret &quot;Y3lkWdmcSEaTWbicn1loDQ==&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">options &#123;</span><br><span class="line">        default-key &quot;rndckey&quot;;</span><br><span class="line">        default-server 127.0.0.1;</span><br><span class="line">        default-port 953;</span><br><span class="line">&#125;;</span><br><span class="line"># End of rndc.conf</span><br><span class="line"></span><br><span class="line"># Use with the following in named.conf, adjusting the allow list as needed:</span><br><span class="line"># key &quot;rndckey&quot; &#123;</span><br><span class="line">#       algorithm hmac-md5;</span><br><span class="line">#       secret &quot;Y3lkWdmcSEaTWbicn1loDQ==&quot;;</span><br><span class="line"># &#125;;</span><br><span class="line"># </span><br><span class="line"># controls &#123;</span><br><span class="line">#       inet 127.0.0.1 port 953</span><br><span class="line">#               allow &#123; 127.0.0.1; &#125; keys &#123; &quot;rndckey&quot;; &#125;;</span><br><span class="line"># &#125;;</span><br><span class="line"># End of named.conf</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/DNS-Domain-Name-System-域名系统/" data-id="cju0k1qlw0000x5s655dw1ru4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-周期性计划任务于网络配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/周期性计划任务于网络配置/" class="article-date">
+  <time datetime="2018-12-12T08:37:00.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/周期性计划任务于网络配置/">周期性计划任务于网络配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-周期性计划任务"><a href="#1-周期性计划任务" class="headerlink" title="1. 周期性计划任务"></a>1. 周期性计划任务</h4><ul>
+<li>1.1 查看计划任务<br>   #crontab -l</li>
+<li><p>1.2 编辑计划任务<br>   #crontab -e</p>
+<pre><code>时间         任务内容
+</code></pre><p>   分钟 小时 日期 月份 星期                     shutdown -h now //每天16:30让系统自动关机</p>
+<pre><code>30  16    *    *    *                              
+
+00   20    *   *    5                       tar -zxvf ftp..tar.gz   /var/ftp/*    //每周五20:00点把ftp上的所有上传文件打包压缩
+59   23   30     *    *                       sh  /root/a.sh
+1    */2   *   *    *                       rm -rf /tmp/*.txt      //每隔2个小时把tmp/目录下的已.txt结尾的文件全部删除         
+</code></pre><p>   分钟    小时     日期     月份    星期<br>   0-59     0-23     1-31     1-12    0-7</p>
+<p>   1-3  ：连续时间<br>   1,3,5: 间隔时间<br>   */5 :频率 （每隔5分钟要干什么）</p>
+<ul>
+<li>1.3 周期性计划任务存放目录<br>  /var/spool/cron/ ，以用户名为文件名称存放</li>
+<li>1.4 删除周期性计划任务<br>  #crontab -r          </li>
+<li>1.5    给指定用户编辑计划任务<br> #crontab -e -u 用户名   //编辑<br> #crontab -r -u 用户名   //删除<br> #crontab -l -u 用户名   //查看</li>
+<li><p>1.6 限制普通用户使用周期性计划任务<br> /etc/cron.deny<br> /etc/cron.allow<br> 限制方式用at.deny at.allow一样</p>
+</li>
+<li><p>1.7 系统周期性计划任务  /etc/crontab<br> [root@localhost ~]# cat /etc/crontab<br> SHELL=/bin/bash<br> PATH=/sbin:/bin:/usr/sbin:/usr/bin<br> MAILTO=root<br> HOME=/</p>
+<p> #run-parts<br> 01 <em> </em> <em> </em> root run-parts /etc/cron.hourly   //每小时执行/etc/cron.hourly目录下的脚本文件<br> 02 4 <em> </em> <em> root run-parts /etc/cron.daily    //每天4点02执行/etc/cron.daily目录下的脚本文件<br> 22 4 </em> <em> 0 root run-parts /etc/cron.weekly<br> 42 4 1 </em> * root run-parts /etc/cron.monthly<br> 注：可以把自己的周期性计划任务放到上面的目录下，按规定的时间执行</p>
+<p> [root@localhost ~]# ls  /etc/cron.*<br> /etc/cron.deny</p>
+<p> /etc/cron.d:</p>
+<p> /etc/cron.daily:<br> 0anacron   cups       makewhatis.cron  prelink  rpm<br> 0logwatch  logrotate  mlocate.cron     rhsmd    tmpwatch</p>
+<p> /etc/cron.hourly:</p>
+<p> /etc/cron.monthly:<br> 0anacron</p>
+<p> /etc/cron.weekly:<br> 0anacron  99-raid-check  makewhatis.cron</p>
+</li>
+<li><p>1.8 延时性计划任务  /etc/init.d/anacron<br> 检查把没有执行过的计划任务重新执行一遍<br> 配置文件 /etc/anacrontab<br> [root@localhost ~]# cat /etc/anacrontab<br> #/etc/anacrontab: configuration file for anacron</p>
+<p> #See anacron(8) and anacrontab(5) for details.</p>
+<p> SHELL=/bin/sh<br> PATH=/sbin:/bin:/usr/sbin:/usr/bin<br> MAILTO=root<br> 天      分钟<br> 1       65      cron.daily              run-parts /etc/cron.daily   //每天开机后的65分钟运行/etc/daily目录下的脚本文件<br> 7       70      cron.weekly             run-parts /etc/cron.weekly<br> 30      75      cron.monthly            run-parts /etc/cron.monthly</p>
+<p> [root@localhost ~]# ls /var/spool/anacron/<br> cron.daily  cron.monthly  cron.weekly<br> [root@localhost ~]# cat /var/spool/anacron/cron.daily  //如果当前系统时间与保存的时间不一样则执行计划任务<br> 20130531</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>让一台pc联网，需要哪些设置
+ip 5类
+A   1.0.0.0   --------    126.255.255.255/8    2^24-2 10.0.0.0     -10.255.255.255/8
+B   128.0.0.0 --------    191.255.255.255/16   2^16-2 172.16.0.0   -172.31.255.255/16
+C   192.0.0.0 --------    223.255.255.255/24   2^8-2  192.168.0.0  -192.168.255.255/24
+D   224.0.0.0 --------    239.255.255.254
+E   240.0.0.0 --------    255.255.255.255
+</code></pre><h4 id="2-子网掩码"><a href="#2-子网掩码" class="headerlink" title="2.子网掩码"></a>2.子网掩码</h4><pre><code>子网掩码：由连续的1组成，标识ip地址的网络位
+网关：与其他网段主机通信的接口
+DNS：把主机名解析到对应的IP地址
+路由：数据包到达目标地址要看的地图
+
+子网掩码是为了确定IP地址的网络位是多少
+IP二进制*子网掩码二进制 = （转换成十进制）网段
+192.168.3.9/16
+11000000.10101000.00000011.00000111
+11111111.11111111.00000000.00000000
+192.168.0.0/16
+手动配置IP地址： 
+ ifconfig 网卡接口名  ip地址
+ ifconfig 网卡接口名  ip地址/子网掩码
+ ifconfig 网卡接口名  ip地址 netmask 子网掩码
+ ifdown eth0  //停用网卡
+ ifup  eth0  //启用网卡
+ service network restart   //重启网络服务
+ /etc/sysconfig/network-scripts/ 网络配置信息 
+    [root@localhost network-scripts]# cat ifcfg-eth0 
+    # Advanced Micro Devices [AMD] 79c970 [PCnet32 LANCE]
+    DEVICE=eth0  //网卡接口名，要和配置文件名的接口名匹配
+    BOOTPROTO=none 设置网卡获取IP地址的方式（static,none,dhcp）
+              dhcp //入网参数是DHCP服务器分配的
+    BROADCAST=192.168.2.255 //设置网卡使用的广播地址
+    HWADDR=00:0C:29:B9:E7:63 //当前网卡的MAC地址
+    ONBOOT=yes   //开机激活网卡
+    NETMASK=255.255.255.0  //指定当前网卡使用的子网掩码
+    IPADDR=192.168.0.22 //指定当前网卡使用的IP地址
+    GATEWAY=192.168.0.1
+    NETWORK=192.168.2.0 //指定当前网卡IP地址所在的网段
+    TYPE=Ethernet
+    USERCTL=no
+    IPV6INIT=no
+    PEERDNS=yes    
+
+    #setup //配置网络地址
+
+    [root@localhost ~]# ifconfig  eth0:1 192.168.0.221  //临时绑定多个IP地址
+    [root@localhost ~]# ifconfig  eth0:2 192.168.0.222
+    //永久配置多个IP地址
+    #cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0:0
+    #vim /etc/sysconfig/network-script/ifcfg-eth0:0 //编辑进行绑定多个IP地址
+    #ifconfig -a //查看所有网卡
+    网卡接口：eth      sit     ppp      fddi    virbr               xenbr
+             以太网卡  IPV6    VPN       光纤   XEN虚拟机内桥      XEN外桥
+</code></pre><h4 id="3-网关配置："><a href="#3-网关配置：" class="headerlink" title="3.网关配置："></a>3.网关配置：</h4><pre><code>#vim /etc/sysconfig/network-script/ifcfg-eth0  //永久生效配置
+   GATEWAY=192.168.2.254
+#service network restart
+#route add default gw 192.168.2.254   //临时添加网关
+#route del default gw 192.168.2.254   //删除网关
+#route -n  //查看路由表
+[root@localhost ~]# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+169.254.0.0     0.0.0.0         255.255.0.0     U     0      0        0 eth0
+0.0.0.0         192.168.0.1     0.0.0.0         UG    0      0        0 eth0   //默认网关UG
+#route add default gw 192.168.3.254/24 
+#route add -net 192.168.3.0/24 dev eth0
+
+192.168.2.245/24  eth0   VPC   eth0   192.168.3.245/24
+                  2.245         3.245
+#ping 192.168.2.245   //可以通
+#ping 192.168.3.245   //不通
+1.设置192.168.2.245的默认网关 #route add default gw 192.168.2.245
+2.添加192.168.3.245 eth1  #ifconfig 192.168.2.245/24
+VPC配置
+ [root@teacher ftp]# cat /proc/sys/net/ipv4/ip_forward  //默认值为0
+ 0
+ [root@teacher ftp]# echo 1 &gt; /proc/sys/net/ipv4/ip_forward //设置为1,启动
+ [root@teacher ftp]# cat /proc/sys/net/ipv4/ip_forward 
+ [root@teacher ftp]# vim /etc/sysctl.conf    //另一种配置方法
+  net.ipv4.ip_forward = 1   //修改值为1
+  [root@localhost ~]# sysctl -p
+    net.ipv4.ip_forward = 1
+    net.ipv4.conf.default.rp_filter = 1
+    net.ipv4.conf.default.accept_source_route = 0
+    kernel.sysrq = 0
+    kernel.core_uses_pid = 1
+    net.ipv4.tcp_syncookies = 1
+    kernel.msgmnb = 65536
+    kernel.msgmax = 65536
+    kernel.shmmax = 4294967295
+    kernel.shmall = 268435456 
+</code></pre><h4 id="4-DHCP"><a href="#4-DHCP" class="headerlink" title="4. DHCP"></a>4. DHCP</h4><pre><code>1.1 DHCP工作原理 C/S
+  /etc/dhcpd.conf  //主配置文件
+  /usr/share/doc/dhcp-3.0.5/dhcpd.conf.sample  模板文件
+  用IP地址是192.168.2.1的主机作DHCP服务器
+  能够分配192.168.2.0/24网段内的IP地址给客户端使用
+  并且IP地址192.168.2.100-101这个范围内的IP地址不会动态
+  分配给客户端使用，要求IP地址192.168.2.188 108 88
+  只分配给BOSS BOSS2 BOSS3
+  所有主机的网关是192.168.2.254
+subnet 192.168.0.0 netmask 255.255.255.0  {-
+    option routers    192.168.2.254; //网关
+    option subnet-mask   255.255.255.0;//子网掩码
+    option domain-name    &quot;domain.org&quot;//客户端主机所在的区
+    option domain-name-servers 1.1.1.1,2.2.2.2,3.3.3.3; //指定DNS服务器 
+    option time-offset    -18000;//标准时间偏差值
+    range   dynamic-bootp 192.168.2.1 192.168.2.99;   //动态分配IP地址范围
+    range   dynamic-bootp 192.168.2.111 192.168.2.253;   //动态分配IP地址范围
+
+    default-lease-time   21600   //默认租期 单位秒
+    max-lease-time   43200;   //最大租期
+    host  boss{    //host 标识名{}
+        hardware ethernet  00:14:78:57:c0:98;//指定MAC地址
+        fixed-addess  192.168.2.188;
+    }
+    host  boss2{    //host 标识名{}
+        hardware ethernet  00:0C:32:EG:8E:4R;//指定MAC地址
+        fixed-addess  192.168.2.108;
+    }
+} //分配IP地址的网段
+
+ #service dhcpd restart  //从启DHCP
+ #dhcpd  //检测配置文件是否有语法错误
+
+ 客户端配置
+ #vim ifcfg.eth0   //编辑此文件
+ BOOTPROTO=dhcp  //修改为dhcp
+
+#pkill -9 dhclient   //杀死客户端进程
+#cat /etc/reslvo.conf
+
+dhcp-server
+租约文件 来记录把IP地址都分配给谁了
+#cat /var/lib/dhcpd/dhcpd.leases
+
+/var/log/messages //错误日志
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/周期性计划任务于网络配置/" data-id="cju0k1qnd002cx5s6q9hjdelh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-进程管理-计划任务" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/进程管理-计划任务/" class="article-date">
+  <time datetime="2018-12-12T08:26:50.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/进程管理-计划任务/">进程管理&amp;计划任务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-进程管理"><a href="#1-进程管理" class="headerlink" title="1.进程管理"></a>1.进程管理</h4><pre><code>进程:运行中的程序
+* 1.1 查看系统内的进行
+  #ps 选项
+   #ps aux
+   #ps -elf
+    -a:显示与终端无关的进行
+    -A:把系统内运行的所有类型的进程都显示出来
+    -u:把触发进程的用户名显示在前几列
+    -x -l -f :显示详细信息，一个比一个详细
+ #ps aux 
+ USER     PID  %CPU %MEM VSZ      RSS       TTY                           STAT         START   TIME COMMAND
+ root      1   0.0  0.0  2164     648        ?                            Ss           10:25   0:00 init [5] 
+      进程编号         虚拟内存KB 物理内存KB  在什么终端运行，?与终端无关 进程当前状态  进程触发时间 进程占用CPU 累计时间       进程名
+</code></pre><p>  进程状态 S s T Z D ？补全<br>  R+:刚运行完或是进程组<br>  Sl:l表示进程是以线程方式运行的</p>
+<p>  #ps -elf<br>  F    S   UID    PID    PPID    C    PRI     NI     ADDR    SZ    WCHAN    STIME    TTY    TIME      CMD<br>  4    S   root    1       0     0    75       0       -     541     -      10:25     ?   00:00:00    init [5]   </p>
+<p>  PRI:系统内核给分配的优先级，无法修改<br>  NI :管理员用户可以修改，修改NI的值改变PRI的值，值的范围-20~19,数越小优先级越高。<br>  PRI=当前修改的NI值＋当前PRI值<br>  ADDR：物理内存<br>  WCHAN：当前内存中的状态“－”表示正在运行</p>
+<p>  #pstree  选项     //查看进程数</p>
+<p>  #pgrep   进程名   //查看进行PID</p>
+<ul>
+<li><p>1.2 动态显示进程<br>   #top      //动态显示进程信息，默认5秒刷新一次</p>
+<pre><code>-d:指定刷新频率  #top -d 2  //2秒刷新一次
+-b:指定执行
+-n:执行次数
+-p:单独查看指定进程的动态信息  
+</code></pre><p>   #top -p 进程PID  //动态查看进行信息<br>   #top -b -n 2 &gt; /tmp/top.txt   //显示2次输出到文件<br>top - 12:20:55 up  1:55(系统运行多长时间),5 user(登录用户数),load average: 0.07, 0.13, 0.05(cpu1,5,15分钟平均数)<br>Tasks: 160 total(当前系统进程数),4 running(运行进程), 155 sleeping(睡觉进程),0 stopped(停止仅此),   1 zombie(僵死进程)<br>Cpu(s): 11.7%us,  7.9%sy,  0.0%ni, 78.0%id,  0.0%wa,  0.3%hi,  2.1%si,  0.0%st<br>Mem:   2065496k total,  1367416k used,   698080k free,    95156k buffers<br>Swap:  4128760k total,        0k used,  4128760k free,   793392k cached</p>
+<p>进入top界面，按i查看cpu，按?查看所有top命令<br>P：按CPU使用率排序<br>M:按内存使用率排序<br>?:显示帮助信息<br>1:显示CPU核数<br>k pid:杀死进程<br>r pid -20 — 19:修改指定进程的优先级</p>
+<ul>
+<li>1.3 终止进程<br>#kill  信号  pid号<br>#kill -l  //查看可以给进程发送的信号<br>ctrl+c :终止进程<br>ctrl+z:暂停进程，把进程置入后并暂停<br>#pkill -9 进程名  //用进程名杀死进程<br>#kill -9 <code>cat /var/run/httpd.pid</code>    //用存放进行PID的文件来杀死进程，<code></code>用来表示执行本身功能<br>#killall -9 vim  //杀死所有vim进程</li>
+</ul>
+</li>
+<li><p>1.4进程存放地址<br> /proc/PID<br> 进程都有一个单独的文件存放进程ID /var/run/httpd.pid<br> /proc/PID/environ //存放进程变量</p>
+</li>
+<li><p>1.5 进程报警<br> #ps aux | wc -l //查看总进程<br> #nump=<code>ps aux | wc -l</code>  //把总进程数赋值给nump<br> #echo $nump </p>
+</li>
+<li><p>1.6 激活后台暂停的进程<br> #bg 1 //1表示[1]<br> [root@www 123]# jobs<br> [1]-  Stopped                 find / -perm +7000 &gt;&amp;/dev/null<br> [2]+  Stopped                 find / -perm -7000 &gt;&amp;/dev/null<br> #fg 编号  //把后台进程调入前台<br> #kill -9 %1 //1是编号，杀死进程</p>
+<p>补充:</p>
+<blockquote>
+<pre><code>;  #mkdir /pljtest1;cd /plgtest1   //;代表顺序执行命令
+</code></pre><p>&amp;&gt; 把正确的输出信息和错误的输出信息都改变默认的输出位置<br>&amp;  把进程放入后台运行</p>
+</blockquote>
+<p>#find / -perm +7000 &amp;&gt; /dev/null<br>#jobs //查看当前系统内有没有后台运行的进程<br>[root@www 123]# jobs<br>[1]-  Stopped                 find / -perm +7000 &gt;&amp;/dev/null<br>[2]+  Stopped                 find / -perm -7000 &gt;&amp;/dev/null<br>＋：表示最近一次停止的进程</p>
+<ul>
+<li><p>1.7 查看某个服务是否开机启动<br> #chkconfig  –list httpd //从查看httpd服务是否是开机启动<br> [root@www 123]# chkconfig –list httpd<br> httpd           0:off   1:off   2:off   3:off   4:off   5:off   6:off<br> linux操作系统共有7个运行级别，编号从0－6<br> 0：关机<br> 1：单用户维护模式 root登录模式<br> 2：没有网络服务的字符模式<br> 3：完全用户字符模式<br> 4：保留<br> 5：图形模式<br> 6：重启系统</p>
+<p> #runlevel  //查看当前系统运行级别<br>   [root@www ~]# runlevel</p>
+<pre><code>N 5           //N：上一次运行级别，5:当前运行级别
+</code></pre><p> #chkconfig –level 5 httpd on  //当运行级别为5的时候开启httpd进程<br> #chkconfig –level 35 httpd on //当运行级别为3，5的时候开启httpd进程<br> #cat /etc/inittab //查看系统默认运行级别，在配置文件/etc/inittab下<br> #ntsync  //查看图形界面启动服务</p>
+</li>
+<li><p>1.8 重启系统<br>  #reboot<br>  #init 6<br>  #shutdown -r now</p>
+<p>忘记密码： e-&gt;菜单-&gt;e 2行 -&gt;io后面加1-&gt;回车-&gt;b         </p>
+</li>
+</ul>
+</li>
+<li><p>1.9 查看进程状态<br>#netstat -autnlp httpd<br> -a:all<br> -u:users<br> -t:tcp<br> -n:num<br> -l:listen<br> -p: pid<br> [root@www Desktop]# netstat -autnlp | grep httpd<br> tcp        0      0 :::80         :::*  LISTEN      5579/httpd </p>
+</li>
+<li>1.10 修改进行PRI的值<br> #nice –20 service httpd start //起动时修改NI的值为-20<br> #renice -15 5616    //把PID为5616的进行NI改为-15<br> newpri = oldpri + nice</li>
+</ul>
+<h4 id="2-计划任务"><a href="#2-计划任务" class="headerlink" title="2.计划任务"></a>2.计划任务</h4><pre><code>* 2.1一次性计划任务
+    #atq //查看是否有一次性计划任务
+    #at 时间      //定制一次性计划任务
+    时间：
+       2.1.1 当前时间 23:00
+         #at 23:00
+       2.1.2 当前时间推迟
+         #at now +3days|hours|minutes 三天之后
+       2.1.3 固定日期
+         #at 2013-05-12
+       [root@www Desktop]# at now +3days
+       at&gt; cp /etc/passwd /tmp/pwd.txt
+       at&gt; &lt;EOT&gt;
+       job 2 at 2013-05-29  15:42    //ctrl+d结束
+       [root@www Desktop]# atq
+        2       2013-05-29 15:42 a root
+       #atq -c 2 //2是编号，查看详细信息
+       #atrm 3  //删除计划任务
+       #rm -rf /var/spool/at/文件名   //删除计划任务
+      2.1.4 没开始执行的计划任务存放路径
+        /var/spool/at/文件名
+
+      2.1.5 控制用户能否使用一次性计划任务
+           #cat /etc/at.deny   //控制计划任务配置文件
+           #echo u6 &gt;&gt; /etc/at.deny  //不让u6使用计划任务
+            //写入at.deny中的用户都不可以使用
+           //默认只有此文件存在，不让那个普通用户使用就把那个用户名添加
+           //到这个文件里，一个用户独占一行                
+           #echo u6 &gt; /etc/at.allow //u6可以使用计划任务
+           //把用户加入at.allow中就可以使用计划任务，at.allow默认不存在
+
+* 2.2周期性计划任务
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/进程管理-计划任务/" data-id="cju0k1qmz001ix5s6qv4125le" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-磁盘阵列RAID" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/磁盘阵列RAID/" class="article-date">
+  <time datetime="2018-12-12T08:24:26.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/磁盘阵列RAID/">磁盘阵列RAID</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-磁盘阵列-raid-存储数据-备份数据"><a href="#1-磁盘阵列-raid-存储数据-备份数据" class="headerlink" title="1.磁盘阵列 raid (存储数据 备份数据)"></a>1.磁盘阵列 raid (存储数据 备份数据)</h4><p>   把多个单个的磁盘从逻辑上组成一个大磁盘，进行存储数据和备份数据。</p>
+<ul>
+<li><p>1.1 硬raid</p>
+</li>
+<li><p>1.2 软raid<br>   1） 用软件实现raid功能<br>   2） mdadm-2.6.9-3.el5.rpm</p>
+<pre><code>#which mdadm
+#rpm -qa /sbin/mdadm
+</code></pre><p>  3）根据制作raid设备时使用级别的不同，功能也不同<br>  4）级别：</p>
+<pre><code>raid0:至少需要2块单独的物理磁盘（容量，接口，转速相等）
+      /dev/sda /dev/sdb raid0 /dev/md0
+      /dev/sdc /dev/sdd raid0 /deb/md1
+      交替存储，读写速度快，完整性差。
+
+raid1:至少需要2块单独的物理磁盘（容量，接口，转速相等）
+      一份数据存储两份，每份磁盘都存储一份，存储速度慢，完整性好。
+
+raid01: raid0+raid1
+
+raid10: raid1+raid0
+
+raid5: 至少需要3块单独物理磁盘
+       要有单独的一块盘来记录写在其他盘上的数据信息
+        /dev/sda    /dev/sdb    /dev/sdc
+           1G         1G          1G
+       raid5 = /dev/md0=(3-1)*1G   //储存容量
+
+ 例：用/dev/hdd1-hdd4作级别是raid5的阵列设备，备用设备hdd4,
+     要开机挂载此设备，挂载到/md0目录里，让所有用户都可以向
+     /md0目录下存数据，但u1用户只能存500M数据。
+     1.分区 /dev/hdd1 /dev/hdd2 /dev/hdd3 /dev/hdd4
+     2.修改标识
+       l:查看标识
+       t:修改标识为fd
+     3.#partprobe  //更新分区表
+     4.#mdadm -C /dev/md0 -l5 -n3 --spare-devices=1 /dev/hdd1 /dev/hdd2 /dev/hdd3 /dev/hdd4 
+      #mdadm -C /dev/md0 -l级别 -n磁盘数 --sparce-dervices=备用盘个数 /dev/hdd{1,2,3,4}
+
+        -C:创建raid设备
+        -l:raid级别
+        -n:raid设备磁盘数
+        --spare-devices = 1 :1块备用
+
+      5.#cat /proc/mdstat    //查看磁盘阵列是否做完
+
+      6.#mkfs.ext3 /dev/md0   //格式化
+
+      7.#mount /dev/md0 /newmd0/ //挂载 
+
+      8.#mdadm -Ds &gt; /etc/mdadm.conf   //扫描raid设备
+
+      9.#cat /proc/mdstat  //查看raid设备状态 
+
+      10.#mdadm -S /dev/md0 //停止raid设备
+
+      11.#mdadm -As /dev/md0  //启动raid设备                   
+</code></pre></li>
+</ul>
+<h4 id="2-PV"><a href="#2-PV" class="headerlink" title="2. PV"></a>2. PV</h4><ul>
+<li>2.1分区<br> 创建逻辑卷，在逻辑卷分区，改标识t-&gt;8e   </li>
+<li>2.2查看pv设备<br> #pvscan    //查看当前是否有PV设备</li>
+<li>2.3创建pv<pre><code>#pvcreate /dev/sda5 /dev/sda5
+#pvcreate /dev/sda{5,6}
+</code></pre></li>
+<li>2.4 查看pv详细信息<br>  #pvdisplay /dev/sda5</li>
+<li>2.5删除pv<br> #pvremove /dev/sda6</li>
+</ul>
+<h4 id="3-VG"><a href="#3-VG" class="headerlink" title="3. VG"></a>3. VG</h4><pre><code>* 3.1 创建VG
+  #vgcreate myvg /dev/sda5 /dev/sda6 //建myvg卷组，把pv放进来
+* 3.2 查看vg设备
+  #vgscan
+* 3.3 查看vg详细信息
+  #vgdisplay myvg
+* 3.4 从vg里移除pv
+  #vgreduce myvg /dev/sda6 //把指定的pv从vg中移除
+* 3.5 往vg里加pv
+  #vgextend myvg /dev/sda6 //把pv追加到已有的卷组里
+* 3.6 删除vg
+  #vgremoce myvg
+</code></pre><h4 id="4-LV-LV容量从现有的VG里来"><a href="#4-LV-LV容量从现有的VG里来" class="headerlink" title="4.LV  LV容量从现有的VG里来"></a>4.LV  LV容量从现有的VG里来</h4><pre><code>* 4.1 查看LV设备
+  #lvscan
+* 4.2 创建
+  #lvcreate -n lv1 -l 25 myvg  //用指定PE的个数来创建lv 
+     -l:用PE个数来指定 25*4M
+  #lvcreate -n lv2 -L 500M  myvg  //使用容量来创建lv
+     -L:指定容量
+* 4.3 查看lv详细信息
+  #lvdisplay /dev/myvg/lv1
+* 4.4 删除lv
+  #lvremove /dev/myvg/lv2
+* 4.5 格式化
+  #mkfs.ext3 /dev/myvg/lv2 
+* 4.6 在线扩展lv
+  #lvresize -l +25 /dev/myvg/lv1 //把lv增大25PE
+* 4.7 更新lv
+  #resize2fs  /dev/myvg/lv1
+* 4.8 缩小lv
+    #umount /lv1
+    #resize2fs /dev/myvg/lv1 100M //把lv1缩小到100M
+    #e2fsck -f /dev/myvg/lv1
+</code></pre><ul>
+<li>4.9 把lv去掉25M<br> #lvresize -l -25 /dev/myvg/lv1</li>
+</ul>
+<h4 id="5-LV快照"><a href="#5-LV快照" class="headerlink" title="5. LV快照:"></a>5. LV快照:</h4><pre><code>* 5.1 创建快照
+   #lvcreate -n lv2s -l 25 -s /dev/vg2/lv2 
+* 5.2 查看快照信息
+  #lvs
+* 5.3移除快照
+   #lvremove /dev/vg2/lv2s
+</code></pre><blockquote>
+<p>   注：  可以挂载快照设备，也可以挂载源lv<br>         在挂载源lv设备时，只要源数据不发生改变，快照设备和源lv设备共享所有PE,<br>         当源设备里的数据发生改变时，会把数据的原始内容搬到快照空间里。<br>         挂载快照设备时，源数据保存在源LV设备里，我所有的操作都在快照空间里执行，<br>         只要数据不超过快照空间的大小就可以，一旦超过快照失效。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/磁盘阵列RAID/" data-id="cju0k1qmy001dx5s6dnu62pdz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-磁盘管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/磁盘管理/" class="article-date">
+  <time datetime="2018-12-12T08:21:37.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/磁盘管理/">磁盘管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-分区"><a href="#1-分区" class="headerlink" title="1.分区"></a>1.分区</h4><p> #fdisk /dev/sda<br>   m:看帮助<br>   p:打印分区信息<br>   n:创建新分区<br>   p:创建主分区<br>   l:创建逻辑分区<br>   e:创建扩展分区<br>   d:删除分区<br>   w:保存分区信息退出<br>   q:不保存分区信息退出</p>
+<p> #partprobe //手动更新分区表</p>
+<h4 id="2-格式化"><a href="#2-格式化" class="headerlink" title="2.格式化"></a>2.格式化</h4><p>  #mke2fs  /dev/sda5  //格式化分区</p>
+<p>  #blkid  /dev/sda5  //查看分区格式化信息</p>
+<h4 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3.挂载"></a>3.挂载</h4><p>  3.1手动挂载</p>
+<pre><code>#mkdir /sda5  //创建挂载点
+#mount /dev/sda5 /sda5   //挂载
+#df -h /sda5   //查看大小
+</code></pre><p>  3.2开机挂载<br>  3.3触发挂载</p>
+<h4 id="4-磁盘配额"><a href="#4-磁盘配额" class="headerlink" title="4.磁盘配额"></a>4.磁盘配额</h4><p>  4.1用户磁盘配额<br>  4.2用户组磁盘配额</p>
+<h4 id="5-RAID"><a href="#5-RAID" class="headerlink" title="5.RAID"></a>5.RAID</h4><h4 id="6-LVM"><a href="#6-LVM" class="headerlink" title="6.LVM"></a>6.LVM</h4><p>  6.1创建LV<br>  6.2扩大LV<br>  6.3缩小LV<br>  6.4快照</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/磁盘管理/" data-id="cju0k1qmv0016x5s6bsg8hwaq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-网络yum源搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/网络yum源搭建/" class="article-date">
+  <time datetime="2018-12-12T08:20:18.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/网络yum源搭建/">网络yum源搭建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-网络yum源（c-s）"><a href="#1-网络yum源（c-s）" class="headerlink" title="1.网络yum源（c/s）"></a>1.网络yum源（c/s）</h3><p>s 192.168.2.18 (server)<br>  1)#rpm -q vsftpd //提供ftp服务<br>   匿名默认访问的目录  /var/ftp  //如果共享，则把文件拷贝到这个目录<br>  2)新建一个目录，把光盘挂载到新建的目录下即可<br>    注：#fuser -mv /mnt  //查看谁在使用，无法卸载</p>
+<pre><code>#fuser -ik /mnt  //杀死所有使用者进程
+</code></pre><p>  #mkdir /var/ftp/iso</p>
+<p>  #mount /dev/cdrom /var/ftp/iso</p>
+<p>c 192.168.2.0/24 (client)<br>  1)保证能访问共享</p>
+<pre><code>#ping -c 3 192.168.2.45
+#ftp 192.168.2.45
+</code></pre><p>  2)添加配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost yum.repos.d]# cat iso.repo </span><br><span class="line">[rhel-serverftp]</span><br><span class="line">name=yum server ip is 192.168.2.45</span><br><span class="line">baseurl=ftp://192.168.2.45/iso/Server/  //指定软件仓库的位置</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure></p>
+<p>   制作iso文件 #cat /dev/cdrom &gt; /rhel5.iso</p>
+<p>   #mount -o loop /rhel5.iso /mnt   //挂载镜象文件</p>
+<h3 id="2-源码包安装"><a href="#2-源码包安装" class="headerlink" title="2.源码包安装"></a>2.源码包安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#rpm -qa | grep gcc</span><br><span class="line">#rpm -qa | grep make</span><br><span class="line">#rpm -qa | grep &quot;c++&quot;</span><br><span class="line">#yum -y grouplist | grep &quot;开发工具&quot; &quot;开发库&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>1)解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  #tar -zxvf httpd-2.2.9.tar.gz -C /usr/src/</span><br><span class="line">* 2)配置</span><br><span class="line"> #./configure --prefix=/usr/local/sourcehttpd</span><br><span class="line"> #./configure --help //查看帮助</span><br></pre></td></tr></table></figure>
+<p>–prefix:指定把软件安装到什么目录，如果不指定，则默认安装到/usr/local/目录下<br>在解压的目录下生成Makefile/Makefile.in文件，放置默认配置信息。</p>
+</li>
+<li>3)编译<br>#make clean //清除配置生成的临时文件<br>#make </li>
+<li><p>4)安装<br>#make install</p>
+<p>#netstat -utnlp | grep :3306 //查看端口号</p>
+<p>mysql数据库服务软件包安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#cd /usr/local/mysqld/bin</span><br><span class="line">#./mysql_install_db --user=mysql //初始化数据库</span><br><span class="line">#./mysqld_safe &amp;  启动服务,在后台运行</span><br><span class="line">#./mysql 登录数据库服务器</span><br></pre></td></tr></table></figure>
+<p>无法登录时<br>1.修改配置文件 /usr/local/mysql-5.0/support-files/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#cp  my-medium.cnf   /etc/my.cnf</span><br><span class="line">#vim /etc/my.cnf</span><br><span class="line">#jobs   //查看后台运行的进程</span><br><span class="line">#kill -9 %1  //杀死后台进程</span><br><span class="line">#export PATH=/usr/local/mysqld/bin/:$PATH</span><br><span class="line">  // 全局添加自定义变量（当前有效）</span><br><span class="line">#vim /etc/rc.local </span><br><span class="line"> //把export PATH=/usr/local/mysqld/bin/:$PATH添加到配置文件中，</span><br><span class="line">     永远有效</span><br></pre></td></tr></table></figure>
+<ul>
+<li>5)源码包卸载</li>
+</ul>
+<p>1).#cd /usr/src/mysql-5.0.1<br>   #make uninstall</p>
+<p>2).直接删除安装目录<br>   #rm -rf /usr/local/mysqld</p>
+<p>3).升级源码包（打补丁） xxx.patch<br>   #cd /usr/local/mysqld<br>   #patch -p1 &lt; xxx.patch // 1代表几级目录</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/网络yum源搭建/" data-id="cju0k1qmx001ax5s6ncuwnvie" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-文件隐藏属性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/文件隐藏属性/" class="article-date">
+  <time datetime="2018-12-12T07:55:04.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/文件隐藏属性/">文件隐藏属性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-文件隐藏属性"><a href="#1-文件隐藏属性" class="headerlink" title="1.文件隐藏属性"></a>1.文件隐藏属性</h4><ul>
+<li><p>1)查看文件的隐藏属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> #lsattr /etc/passwd</span><br><span class="line">[root@localhost ~]# lsattr /etc/passwd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2)设置文件隐藏属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#chattr -/+选项 文件名</span><br><span class="line">#chattr [-RVf] [-+=AacDdijsSu] [-v version] files...</span><br></pre></td></tr></table></figure>
+<p>a:只能以追加的方式向文件里添加新内容<br>i:不能移动、编辑、删除 (对root用户有效)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost lsattr]# chattr +a a.txt //添加隐藏属性</span><br><span class="line">[root@localhost lsattr]# ll</span><br><span class="line">total 8</span><br><span class="line">-rw-r--r-- 1 root root 31 May 12 11:17 a.txt</span><br><span class="line">[root@localhost lsattr]# lsattr a.txt  //查看隐藏属性</span><br><span class="line">-----a------- a.txt</span><br><span class="line">[root@localhost lsattr]# vim a.txt  //vim编辑不能保存</span><br><span class="line">[root@localhost lsattr]# echo 1212312 &gt;&gt; a.txt  //只能追加方式添加内容</span><br><span class="line">[root@localhost lsattr]# cat a.txt</span><br><span class="line"> isdfasdf</span><br><span class="line"> asfdasdfasfd</span><br><span class="line"> asdfsadf</span><br><span class="line"> 1212312</span><br><span class="line"></span><br><span class="line">[root@localhost lsattr]# chattr -a a.txt //取消隐藏属性</span><br><span class="line">[root@localhost lsattr]# lsattr a.txt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="2-软件包管理-（rpm包，yum源，源码包）"><a href="#2-软件包管理-（rpm包，yum源，源码包）" class="headerlink" title="2.软件包管理 （rpm包，yum源，源码包）"></a>2.软件包管理 （rpm包，yum源，源码包）</h4><p>  1)查看<br>  2)安装<br>  3)卸载<br>  4)升级</p>
+<h4 id="3-linux系统软件包的类型"><a href="#3-linux系统软件包的类型" class="headerlink" title="3.linux系统软件包的类型"></a>3.linux系统软件包的类型</h4><p>  1).rpm 默认的封包类型  rpm(红帽包管理器)<br>  2).bin 加上可执行权限就可以运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#chmod a+x xxxx.bin </span><br><span class="line">#./xxxx.bin</span><br></pre></td></tr></table></figure></p>
+<p>  3)免安装的，不需要安装，解包后包里自带启动脚本<br>  4)源码包(编译后才可以安装)<br>   .tar.gz<br>   .tar.bz2</p>
+<h4 id="4-rpm包-用数据库的形式记录以安装的软件包"><a href="#4-rpm包-用数据库的形式记录以安装的软件包" class="headerlink" title="4.rpm包:用数据库的形式记录以安装的软件包"></a>4.rpm包:用数据库的形式记录以安装的软件包</h4><p>  /var/lib/rpm :rpm包数据存放地址</p>
+<p>  #rmp 选项 [软件名|软件包名]<br>   -q:查看指定的软件是否安装<br>   -qa:查看系统内已经安装了哪些rpm包<br>   -qc:查看软件包里的配置文件安装到什么目录里<br>   -qf:查看指定的文件是由那个安装包提供的<br>   -qi:查看以安装的软件包信息<br>   -qpl:查看包里提供什么文件</p>
+<pre><code>#rpm -qa | grep &quot;samba&quot; //所有的包里包含samba的包
+1)查看 
+  #rpm -q httpd
+  httpd-2.2.3-63.el5.rpm 
+  包名-主版本号.次版本号-释放次数.rhel5.rpm
+
+  #rpm -ql httpd //查看软件包里的文件安装到系统的什么目录下
+  /etc/:存放配置文件目录，通常生成于软件同名的目录，作为软件的主目录
+  /usr/bin:存放命令
+  /usr/lib:存放软件的库文件
+  /usr/sbin:管理员存放命令
+  /usr/share/doc/ 配置文件的模板文件
+  /usr/share/man/  帮助手册
+
+  #rpm -qc httpd  //查看软件提供的配置文件安装到什么目录里
+  [root@localhost mnt]# rpm -qf /etc/httpd/conf/httpd.conf 
+  httpd-2.2.3-63.el5
+</code></pre><p>   2)安装</p>
+<pre><code>#rpm -ivh 软件包名
+#rpm -ivh /mnt/Server/httpd-devel.xxx.xx.rpm
+ -i:安装
+ -v:显示安装信息
+ -h:用#显示安装进度
+ --nodeps 忽略包依赖关系安装
+ --force  强制安装软件包
+ #rpm -ivh --force 软件包名
+</code></pre><p>   3)卸载<br>    -e:卸载rpm包<br>    –nodeps 忽略包依赖关系卸载<br>    –force  强制卸载软件包</p>
+<pre><code>#rpm -e --nodeps 软件包名
+</code></pre><p>   4)升级</p>
+<pre><code>#rpm -Uvh  xxxx.rpm
+-U:如果低版本的没有安装，直接安装当前版本的软件包
+#rpm -Fvh xxxx.rpm
+-F:如果低版本没有安装，高版本安装不上
+</code></pre><p>  5)验证<br>     //对rpm包做验证，查看文件是否被修改过<br>   -V</p>
+<p>   #rpm -Va :把系统内所有被改动过的文件都显示出来</p>
+<p>   #rpm -Vf :查看指定的文件是否被改动过</p>
+<p>   #rpm -V 软件名 : 查看指定软件提供的文件都有哪些被改动过</p>
+<p>   #rpm –initdb:手动更新rpm包数据库文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mnt]# rpm -Vf /etc/passwd</span><br><span class="line">  S.5....T  c /etc/printcap</span><br><span class="line">    S file Size differs</span><br><span class="line">    M Mode differs (includes permissions and file type)</span><br><span class="line">    5 MD5 sum differs</span><br><span class="line">    D Device major/minor number mismatch</span><br><span class="line">    L readLink(2) path mismatch</span><br><span class="line">    U User ownership differs</span><br><span class="line">    G Group ownership differs</span><br><span class="line">    T mTime differs</span><br></pre></td></tr></table></figure>
+<h4 id="5-光盘文件"><a href="#5-光盘文件" class="headerlink" title="5.光盘文件"></a>5.光盘文件</h4><p>  Server 提供服务的软件包<br>  VT 提供虚拟化技术的软件<br>  Cluster 提供集群功能的软件包<br>  ClusterStorage 提供集群和存储功能软件包<br>  提供镜像文件和引导文件<br>  images<br>  isolinux  </p>
+<h4 id="6-搭建yum源（解决安装rpm时-rpm包间的依赖）"><a href="#6-搭建yum源（解决安装rpm时-rpm包间的依赖）" class="headerlink" title="6.搭建yum源（解决安装rpm时 rpm包间的依赖）"></a>6.搭建yum源（解决安装rpm时 rpm包间的依赖）</h4><p>  1)本地yum源<br>    server: mount /dev/cdrom /mnt<br>    client: cd /etc/yum.repos.d/xxxx.repo<br>      [rhel-debuginfo]<br>      name=Red Hat Enterpris //描述信息<br>      baseurl=file:///mnt/Server/ //包存放地址<br>      enable=1 //启用上3行的配置 1取用<br>      gpgcheck=1 //是否对安装的包做验证<br>      gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release<br>        //对安装的包验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#yum clean all //清除yum信息</span><br><span class="line">#yum list</span><br><span class="line">#yum grouplist </span><br><span class="line">#yum -y groupremove &quot;DNS 服务器&quot; //卸载一组软件包</span><br><span class="line">#yum -y groupinstall &quot;DNS&quot; //安装一组软件包</span><br><span class="line">#yum -y install 软件名1 软件名2 软件名3...</span><br><span class="line">#yum -y remove  软件名1 软件名2 软件名3...</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/文件隐藏属性/" data-id="cju0k1qms0011x5s6gy83s9jc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-文件权限" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/12/文件权限/" class="article-date">
+  <time datetime="2018-12-12T07:45:10.000Z" itemprop="datePublished">2018-12-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/12/文件权限/">文件权限</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1-文件权限"><a href="#1-文件权限" class="headerlink" title="1.文件权限"></a>1.文件权限</h4><h5 id="1-普通权限-r-w-x-设置一类用户对某个文件或目录的rwx权限"><a href="#1-普通权限-r-w-x-设置一类用户对某个文件或目录的rwx权限" class="headerlink" title="1)普通权限 r w x  (设置一类用户对某个文件或目录的rwx权限)"></a>1)普通权限 r w x  (设置一类用户对某个文件或目录的rwx权限)</h5><h6 id="1-1-查看文件的权限-ll-etc-passwd"><a href="#1-1-查看文件的权限-ll-etc-passwd" class="headerlink" title="1.1)查看文件的权限 #ll  /etc/passwd"></a>1.1)查看文件的权限 #ll  /etc/passwd</h6><h6 id="1-2-查看目录的权限-ll-d-root"><a href="#1-2-查看目录的权限-ll-d-root" class="headerlink" title="1.2)查看目录的权限 #ll -d /root"></a>1.2)查看目录的权限 #ll -d /root</h6>   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># ll /etc/passwd</span></span><br><span class="line">-rw-r--r-- 1 root root 2421 May 10 22:37 /etc/passwd</span><br><span class="line">权限位:链接数:所有者:所属组:文件大小:日期:时间:文件名/目录名</span><br><span class="line">[root@localhost ~]<span class="comment"># ll -d /root</span></span><br><span class="line">drwxr-x--- 36 root root 4096 May 11 09:51 /root</span><br></pre></td></tr></table></figure>
+<p>   权限列表 由10个字符组成 drwxr-x—<br>   第一个字符:表示类型<br>   -:文件 d:目录 b:块设备 p:管道 s:套接字 l:链接 c:字符设备<br>   后9个字符每3个字符为一组，共3组<br>   第一组:文件或目录的所有者权限<br>   第二组:文件或目录的所属组权限<br>   第三组:文件或目录的其他用户的权限</p>
+<p>   权限      字母    数字           文件                    目录<br>    读        r       4          cat head tail more less    ls<br>    写        w       2          vim                        touch rmdir rm mkdir<br>    执行      x       1          运行文件                   cd<br>    无        -       0          不能做任何操作             不能做任何操作</p>
+<p>   用户类型     表示<br>    所有者      u          这个用户创建的这个文件或文件夹<br>    所属组      g          用户创建的这个文件或文件夹时所在的用户组<br>    其他用户    o          这个用户既不是文件或文件夹的所有者，也不在所属组里<br>    所有用户    a          以上三类用户的总称</p>
+<h6 id="1-3-修改文件或文件夹权限"><a href="#1-3-修改文件或文件夹权限" class="headerlink" title="1.3)修改文件或文件夹权限"></a>1.3)修改文件或文件夹权限</h6>   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#chmod [选项] 权限列表   文件名/目录名</span></span><br><span class="line">   -R:给文件夹设置递归权限</span><br></pre></td></tr></table></figure>
+<pre><code>权限列表：
+ 数字: #chmod 700 /adir  //修改adir目录权限为700
+       #chmod drwx------ /adir
+ 字母: #chmod u=rwx,g=rx,o=r /a.txt
+
+ 赋值符号:
+    =:指定用户拥有这样的权限
+    -:在源权限的基础上去掉指定的权限
+    +:在源权限的基础上加上指定的权限
+   注:a) 当把目录设置了写权限，这个目录下的文件可以进行删除操作。
+      b) 当编辑别的用户的文件时，这个文件就所有者和所属组变成自己的所有者和所属组
+      c) 当删除文件时，必须知道文件的确切文件名才可以删除。
+      d) 当删除当前目录时，看当前目录的父目录是否有写权限，如果没有则不能删除。
+      e)普通权限对特权用户无效
+-rwxr--r--
+u    rwx   7
+g    r--   4
+o    r--   4
+</code></pre>   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># chmod u=rwx,g=rx,o=r test.txt </span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># ll</span></span><br><span class="line">total 24</span><br><span class="line">-rw-r--r-- 1 root root   55 May  5 00:14 test1.txt</span><br><span class="line">-rw-r--r-- 1 root root  191 May  5 00:04 test2.txt</span><br><span class="line">-rwxr-xr-- 1 root root 2051 May  4 23:46 test.txt</span><br></pre></td></tr></table></figure>
+<h5 id="2-文件访问控制列表-facl"><a href="#2-文件访问控制列表-facl" class="headerlink" title="2)文件访问控制列表 facl"></a>2)文件访问控制列表 facl</h5><pre><code>单独设置某个用户或用户组对某个文件或目录的rwx权限
+对单一用户或用户组单独设置对某个目录或文件的rwx权限
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#setfacl -m 用户类型:用户名或用户组名:权限列表  文件名/目录名</span></span><br><span class="line">  -m:设置acl权限</span><br><span class="line">  -x:去掉acl权限</span><br><span class="line">  -b:去掉目录或文件的所有acl权限</span><br><span class="line">  -R:递归设置目录 acl权限</span><br><span class="line">  -d:指定目录默认的acl权限</span><br><span class="line">  -k:去掉目录默认的acl权限</span><br><span class="line">  u:用户</span><br><span class="line">  g:用户组</span><br><span class="line"> <span class="comment">#setfacl -m u:s5:rwx /public1</span></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># ll -d ./public1</span></span><br><span class="line"> d---rwx---+ 2 root root 4096 May 11 14:10 ./public1</span><br><span class="line"> +:代表设置了facl权限</span><br><span class="line"> </span><br><span class="line"><span class="comment">#getfacl 文件名/目录名   //查看facl权限</span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./public1</span></span><br><span class="line"> <span class="comment">#file: public1</span></span><br><span class="line"> <span class="comment">#owner: root</span></span><br><span class="line"> <span class="comment">#group: root</span></span><br><span class="line"> user::---     //普通权限</span><br><span class="line"> user:s5:rwx   //普通用户设置的权限</span><br><span class="line"> group::---    //所属组权限</span><br><span class="line"> mask::rwx     //默认acl权限</span><br><span class="line"> other::---    //这个目录的其他用户权限</span><br><span class="line"> </span><br><span class="line"><span class="comment">#setfacl -m  g:stu1:rwx ./public1</span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./public1</span></span><br><span class="line"><span class="comment">#file: public1</span></span><br><span class="line"><span class="comment">#owner: root</span></span><br><span class="line"><span class="comment">#group: root</span></span><br><span class="line">user::---</span><br><span class="line">user:s5:rwx</span><br><span class="line">group::---</span><br><span class="line">group:stu1:r-x</span><br><span class="line">mask::rwx</span><br><span class="line">other::---</span><br><span class="line"></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># setfacl -x u:s5 ./public1  //删除用户s5的权限</span></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./public1</span></span><br><span class="line"> <span class="comment">#file: public1</span></span><br><span class="line"> <span class="comment">#owner: root</span></span><br><span class="line"> <span class="comment">#group: root</span></span><br><span class="line"> user::---</span><br><span class="line"> group::---</span><br><span class="line"> group:stu1:r-x</span><br><span class="line"> group:stu2:r--</span><br><span class="line"> mask::r-x</span><br><span class="line"> other::---</span><br><span class="line"></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># setfacl -x g:stu2 ./public1  //删除用户组stu2权限</span></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./public1</span></span><br><span class="line"> <span class="comment"># file: public1</span></span><br><span class="line"> <span class="comment"># owner: root</span></span><br><span class="line"> <span class="comment"># group: root</span></span><br><span class="line"> user::---</span><br><span class="line"> group::---</span><br><span class="line"> group:stu1:r-x</span><br><span class="line"> mask::r-x</span><br><span class="line"> other::---</span><br><span class="line"></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># setfacl -b ./public1  //去掉所有权限</span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./public1</span></span><br><span class="line"><span class="comment">#file: public1</span></span><br><span class="line"><span class="comment">#owner: root</span></span><br><span class="line"><span class="comment">#group: root</span></span><br><span class="line">user::---</span><br><span class="line">group::---</span><br><span class="line">other::---</span><br><span class="line"></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment">#setfacl -R -m u:s5:rwx ./public1/ //递归设置权限</span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./public1</span></span><br><span class="line"> <span class="comment">#file: public1</span></span><br><span class="line"> <span class="comment">#owner: root</span></span><br><span class="line"> <span class="comment">#group: root</span></span><br><span class="line"> user::---</span><br><span class="line"> user:s5:rwx</span><br><span class="line"> group::---</span><br><span class="line"> mask::rwx</span><br><span class="line"> other::---</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># setfacl -m d:u:s7:rwx ./pub2 //设置目录默认的acl权限</span></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./pub2</span></span><br><span class="line"> <span class="comment">#file: pub2</span></span><br><span class="line"> <span class="comment">#owner: root</span></span><br><span class="line"> <span class="comment">#group: root</span></span><br><span class="line"> user::rwx</span><br><span class="line"> group::---</span><br><span class="line"> other::---</span><br><span class="line"> default:user::rwx</span><br><span class="line"> default:user:s7:rwx</span><br><span class="line"> default:group::---</span><br><span class="line"> default:mask::rwx</span><br><span class="line"> default:other::---</span><br><span class="line"></span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># setfacl -k d:u:s7 ./pub2 //去掉目录默认的acl权限</span></span><br><span class="line"> setfacl: d:u:s7: No such file or directory</span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl ./pub2</span></span><br><span class="line"> <span class="comment">#file: pub2</span></span><br><span class="line"> <span class="comment">#owner: root</span></span><br><span class="line"> <span class="comment">#group: root</span></span><br><span class="line"> user::rwx</span><br><span class="line"> group::---</span><br><span class="line"> other::---</span><br></pre></td></tr></table></figure>
+</code></pre><p> mask<br>   root : 755 644<br>   user : 775 664<br>   mask文件: /etc/profile</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#setfacl -m m:rx /pub3 //设置acl的mask码</span></span><br><span class="line">facl设置mask码时，要与默认的mask码做逻辑于运算，最后的出的值才是真正的权限   </span><br><span class="line"></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># setfacl -m m:r pub4</span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># getfacl pub4</span></span><br><span class="line"><span class="comment">#file: pub4</span></span><br><span class="line"><span class="comment">#owner: root</span></span><br><span class="line"><span class="comment">#group: root</span></span><br><span class="line">user::rwx</span><br><span class="line">user:s1:rwx                     <span class="comment">#effective:r--</span></span><br><span class="line">group::r-x                      <span class="comment">#effective:r--</span></span><br><span class="line">mask::r--</span><br><span class="line">other::r-x</span><br></pre></td></tr></table></figure>
+<h5 id="3-特殊权限-SUID-SGID-SKICTY-BIT"><a href="#3-特殊权限-SUID-SGID-SKICTY-BIT" class="headerlink" title="3)特殊权限 SUID SGID SKICTY BIT"></a>3)特殊权限 SUID SGID SKICTY BIT</h5><pre><code>suid      : s  4
+  1)仅设置在二进制文件上(命令)
+  2)用户要对文件本身有执行权限
+  3)给某个二进制文件设置了suid权限后，用户在执行这个文件的时候
+    会拥有文件所有者的权限
+  4)如果文件所有者有执行权限时suid权限用s显示，反之用大S显示。
+    SUID设置后是占用所有者的执行位显示
+sgid      : s  2
+skity bit : t  1
+让用户在执行文件时拥有文件所有者的权限
+</code></pre>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># umask</span></span><br><span class="line"> 0022      //第一位为特殊权限位</span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># ll -d /tmp</span></span><br><span class="line"> drwxrwxrwt 17 root root 4096 May 11 13:40 /tmp</span><br><span class="line"> [root@localhost <span class="built_in">test</span>]<span class="comment"># ll /usr/bin/passwd</span></span><br><span class="line"> -rwsr-xr-x 1 root root 23420 Aug  3  2010 /usr/bin/passwd</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line"><span class="comment">##### 4)特殊权限位</span></span><br><span class="line"> * 1)SUID</span><br><span class="line">  ```language</span><br><span class="line">   <span class="comment">#chmod 4751 /usr/sbin/useradd</span></span><br><span class="line">   <span class="comment">#chmod u+s /usr/sbin/useradd</span></span><br><span class="line">   [root@localhost ~]<span class="comment"># chmod 4751 /usr/sbin/useradd</span></span><br><span class="line">   [root@localhost ~]<span class="comment"># ll /usr/sbin/useradd</span></span><br><span class="line">   -rwsr-x--x 1 root root 74608 Oct 25  2011 /usr/sbin/useradd</span><br><span class="line">   <span class="comment">#find / -perm 4755   //查找系统内加了SUID权限的二进制文件有那些</span></span><br><span class="line">  <span class="comment">#chmod 751 /usr/sbin/useradd  //撤销特殊权限位</span></span><br><span class="line">  <span class="comment">#chmod u-s /usr/sbin/useradd</span></span><br><span class="line">  [root@localhost ~]<span class="comment"># chmod 751 /usr/sbin/useradd </span></span><br><span class="line">  [root@localhost ~]<span class="comment"># ll /usr/sbin/useradd</span></span><br><span class="line">  -rwxr-x--x 1 root root 74608 Oct 25  2011 /usr/sbin/useradd</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">  * 2)SGID</span><br><span class="line">       既能设置在二进制文件上又能设置在目录上，通常被设置在目录占用</span><br><span class="line">           文件所属组的执行位显示，若文件所属组有执行权限时sgid权限用s</span><br><span class="line">           显示否则用S显示。会让在目录下建的子文件或子目录继承父目录的</span><br><span class="line">           所属组。</span><br><span class="line"></span><br><span class="line">```language</span><br><span class="line">   #chmod g+s  /sgiddir/</span><br><span class="line">   #chmod g-s  /sgiddir/</span><br><span class="line">   [root@localhost test]# chmod g+s ./sgiddir/</span><br><span class="line">   [root@localhost test]# ll  -d ./sgiddir/</span><br><span class="line">   drwxr-sr-x 2 root root 4096 May 12 10:50 ./sgiddir/</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>3)skicty bit (防删除位)<br>  1.只能设置在目录上<br>  2.当给目录设置了此权限后，用户只能删除自己的文件，不能删除其他人的</p>
+<pre><code>文件，但对root用户无效。
+</code></pre><p>  3.占用目录的其他用户的执行位显示，若目录的其他用户有执行权时skicty<br>  bit 权限用小t显示，反之用T显示。<br>  4.不能移动，不能改名，可拷贝，可链接。<br>  #chmod o+t /skdir<br>  #chmod o-t /skdir</p>
+   <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># ll -d skdir/</span></span><br><span class="line">drwxr-xr-x 2 root root 4096 May 12 10:59 skdir/</span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># chmod o+t skdir/</span></span><br><span class="line">[root@localhost <span class="built_in">test</span>]<span class="comment"># ll -d skdir/</span></span><br><span class="line">drwxr-xr-t 2 root root 4096 May 12 10:59 skdir/ </span><br><span class="line"></span><br><span class="line"><span class="comment">#chmod 7755 /sdir</span></span><br><span class="line"><span class="comment">#chmod rwsr-sr-t /sdir //数字转换成字母</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/12/文件权限/" data-id="cju0k1qnq002ox5s6zbf8vn39" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务器/">服务器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/go/" style="font-size: 17.5px;">go</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/php/" style="font-size: 12.5px;">php</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/服务器/" style="font-size: 15px;">服务器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/24/SQLSTATE-HY000-2054-The-server-requested/">SQLSTATE[HY000] [2054] The server requested </a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/辅助DNS服务器搭建/">辅助DNS服务器搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/DNS-Domain-Name-System-域名系统/">DNS (Domain Name System)域名系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/周期性计划任务于网络配置/">周期性计划任务于网络配置</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/进程管理-计划任务/">进程管理&amp;计划任务</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

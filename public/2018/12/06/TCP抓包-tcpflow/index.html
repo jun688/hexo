@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>[TCP抓包] tcpflow | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="tcpflow是一款抓包工具，这个抓包工具与tcpdump不同的是它是以流为单位显示数据内容，而tcpdump以包为单位显示数据。我们平常 会经常分析HTTP数据，用tcpflow会更便捷。 tcpflow看起来更像wireshark的命令行版本，他可以直接从网卡抓包，并且解析出来，支持http ftp这些L7协议，也支持tcp udp抓包， 还可以从tcpdump中读取东西，因此是一个非常好的">
+<meta name="keywords" content="服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[TCP抓包] tcpflow">
+<meta property="og:url" content="http://yoursite.com/2018/12/06/TCP抓包-tcpflow/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="tcpflow是一款抓包工具，这个抓包工具与tcpdump不同的是它是以流为单位显示数据内容，而tcpdump以包为单位显示数据。我们平常 会经常分析HTTP数据，用tcpflow会更便捷。 tcpflow看起来更像wireshark的命令行版本，他可以直接从网卡抓包，并且解析出来，支持http ftp这些L7协议，也支持tcp udp抓包， 还可以从tcpdump中读取东西，因此是一个非常好的">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/image2018-11-25_20-38-52-1.png">
+<meta property="og:updated_time" content="2018-12-18T08:00:18.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[TCP抓包] tcpflow">
+<meta name="twitter:description" content="tcpflow是一款抓包工具，这个抓包工具与tcpdump不同的是它是以流为单位显示数据内容，而tcpdump以包为单位显示数据。我们平常 会经常分析HTTP数据，用tcpflow会更便捷。 tcpflow看起来更像wireshark的命令行版本，他可以直接从网卡抓包，并且解析出来，支持http ftp这些L7协议，也支持tcp udp抓包， 还可以从tcpdump中读取东西，因此是一个非常好的">
+<meta name="twitter:image" content="http://yoursite.com/images/image2018-11-25_20-38-52-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-TCP抓包-tcpflow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/06/TCP抓包-tcpflow/" class="article-date">
+  <time datetime="2018-12-06T03:38:30.000Z" itemprop="datePublished">2018-12-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/服务器/">服务器</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      [TCP抓包] tcpflow
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>tcpflow是一款抓包工具，这个抓包工具与tcpdump不同的是它是以流为单位显示数据内容，而tcpdump以包为单位显示数据。我们平常 会经常分析HTTP数据，用tcpflow会更便捷。 tcpflow看起来更像wireshark的命令行版本，他可以直接从网卡抓包，并且解析出来，支持http ftp这些L7协议，也支持tcp udp抓包， 还可以从tcpdump中读取东西，因此是一个非常好的看包工具，有了这个东西以后再也不用把线上服务器上的dump抓下来再用 wireshark打开了。</p>
+</blockquote>
+<p>下方选用的修改版，所以编译后，man帮助指令得不到正确的反馈，请参看: <a href="http://www.circlemud.org/jelson/software/tcpflow/tcpflow.1.html" target="_blank" rel="noopener">http://www.circlemud.org/jelson/software/tcpflow/tcpflow.1.html</a></p>
+<h4 id="安装指南"><a href="#安装指南" class="headerlink" title="安装指南"></a>安装指南</h4><p>如果没有安装unzip，或者提示Can’t find pcap.h，则安装libpcap-devel包即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install libpcap-devel unzip</span><br></pre></td></tr></table></figure></p>
+<p>然后下载压缩包，继续安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget &quot;https://github.com/mukhin/tcpflow/archive/master.zip&quot; -O tcpflow-master.zip</span><br><span class="line">unzip tcpflow-master.zip</span><br><span class="line">cd tcpflow-master</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">cd ..</span><br><span class="line">rm -rf tcpflow-master*</span><br></pre></td></tr></table></figure></p>
+<h4 id="使用指南"><a href="#使用指南" class="headerlink" title="使用指南"></a>使用指南</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 抓取网卡eth3，发往主机192.168.111.111的报文</span><br><span class="line">tcpflow -t -cp host 192.168.111.111 -i eth3</span><br><span class="line"> </span><br><span class="line"># 抓取目标端口为3306，内容包含&quot;update &quot;的报文</span><br><span class="line">tcpflow -t -cp dst port 3306|grep -i &quot;update &quot;</span><br></pre></td></tr></table></figure>
+<p>过滤器表达式，同tcpdump，不熟悉的可以查看 <a href="http://www.circlemud.org/jelson/software/tcpflow/tcpflow.1.html" target="_blank" rel="noopener">http://www.circlemud.org/jelson/software/tcpflow/tcpflow.1.html</a> ，FILTERING EXPRESSIONS 部分。</p>
+<h4 id="效果说明"><a href="#效果说明" class="headerlink" title="效果说明"></a>效果说明</h4><p><img src="/images/image2018-11-25_20-38-52-1.png" alt><br>发起了一次 wget 请求，同时监听了 db.master 这个域名(即192.168.3.90)</p>
+<p>得到两次tcp交互，一次为蓝色，可以看到：</p>
+<p>这是一次从192.168.4.32 发起的请求，在请求index.html页面<br>UA表名是linux的指令 wget v1.12<br>另一次为黄色，可以看到:</p>
+<ul>
+<li>192.168.3.90地址反馈说，500错误，内部服务器错误</li>
+<li>这台机器上安装的web应用软件是Tengine，但是没有显示版本</li>
+<li>web服务器上用到的PHP版本是7.0.13</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/06/TCP抓包-tcpflow/" data-id="cju0k1qm90007x5s60bcx4kjw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务器/">服务器</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/06/全局监控-dstat/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          [全局监控] dstat
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/05/MongoDB权威指南中文版/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MongoDB权威指南中文版</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务器/">服务器</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/go/" style="font-size: 17.5px;">go</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/php/" style="font-size: 12.5px;">php</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/服务器/" style="font-size: 15px;">服务器</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/24/SQLSTATE-HY000-2054-The-server-requested/">SQLSTATE[HY000] [2054] The server requested </a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/辅助DNS服务器搭建/">辅助DNS服务器搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/DNS-Domain-Name-System-域名系统/">DNS (Domain Name System)域名系统</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/周期性计划任务于网络配置/">周期性计划任务于网络配置</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/12/进程管理-计划任务/">进程管理&amp;计划任务</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
